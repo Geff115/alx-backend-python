@@ -7,7 +7,7 @@ type checking error.
 from typing import Tuple, List
 
 
-def zoom_array(lst: Tuple[int, ...], factor: int = 2) -> List[int]:
+def zoom_array(lst: Tuple, factor: int = 2) -> List:
     """
     ARGS:
         - lst: A tuple of integers, where ... means the tuple can
@@ -17,7 +17,7 @@ def zoom_array(lst: Tuple[int, ...], factor: int = 2) -> List[int]:
     RETURN: A List[int] instead of a tuple to match the list
     comprehension.
     """
-    zoomed_in: List[int] = [
+    zoomed_in: List = [
         item for item in lst
         for i in range(factor)
     ]
