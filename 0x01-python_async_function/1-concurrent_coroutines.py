@@ -33,22 +33,14 @@ async def wait_n(n: int, max_delay: int) -> List[float]:
 
     # Sorting the batch in a new list without using sorted()
     # Using insertion sort algorithm
-    def insertion_sort(batch):
-        """
-        A helper function to help sort out the
-        batch list
-        """
-        sorted_list = []
-        for element in batch:
-            # finding the correct insertion point
-            i = 0
-            while i < len(sorted_list) and sorted_list[i] < element:
-                i += 1
-            # inserting the element at the correct position
-            sorted_list.insert(i, element)
-        return sorted_list
+    sorted_list = []
+    for element in batch:
+        # finding the correct insertion point
+        i = 0
+        while i < len(sorted_list) and sorted_list[i] < element:
+            i += 1
+        # inserting the element at the correct position
+        sorted_list.insert(i, element)
 
-    sorted_batch = insertion_sort(batch)
-
-    # Returning the new sorted batch list
-    return sorted_batch
+    # Returning the sorted_list
+    return sorted_list
