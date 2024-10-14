@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 """
 This script simply just alters the code from wait_n
 into a new function task_wait_n.
