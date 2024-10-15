@@ -8,9 +8,10 @@ random number between 0 and 10.
 
 import asyncio
 import random
+from typing import List
 
 
-async def async_generator() -> float:
+async def async_generator() -> List[float]:
     """
     This function has no argument, but rather generates
     a random floating point number between 0 and 10
