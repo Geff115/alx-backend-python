@@ -5,9 +5,11 @@ function.
 """
 
 import unittest
+import requests
+from unittest.mock import patch, MagicMock
 from parameterized import parameterized
-from utils import access_nested_map
-from typing import Mapping, Sequence, Any
+from utils import access_nested_map, get_json
+from typing import Mapping, Sequence, Any, Dict
 
 
 class TestAccessNestedMap(unittest.TestCase):
@@ -32,3 +34,25 @@ class TestAccessNestedMap(unittest.TestCase):
         with self.assertRaises(KeyError) as context:
             access_nested_map(nested_map, path)
         self.assertEqual(str(context.exception), repr(path[-1]))
+
+
+class TestGetJson(unittest.TestCase):
+    """Test class"""
+    @parameterized.expand([
+        ("https://example.com", {"payload": True}),
+        ("https://holberton.io", {"payload": False})
+    ])
+    @patch('requests.get')
+    def test_get_json(self, test_url: str, test_payload: Dict,
+                      mock_requests: Any) -> None:
+        """Testing the requests.get object"""
+        # Mock the response object
+        mock_response = MagicMock()
+        mock_response.json.return_value = test_payload
+        mock_requests.return_value = mock_response
+
+        # Call get_json and assert its output
+        self.assertEqual(get_json(test_url), test_payload)
+
+        # Assert that requests.get was called once with test_url
+        mock_requests.assert_called_once_with(test_url)
