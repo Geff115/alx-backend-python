@@ -8,7 +8,7 @@ import unittest
 import requests
 from unittest.mock import patch, MagicMock
 from parameterized import parameterized
-from utils import access_nested_map, get_json
+from utils import access_nested_map, get_json, memoize
 from typing import Mapping, Sequence, Any, Dict
 
 
@@ -56,3 +56,32 @@ class TestGetJson(unittest.TestCase):
 
         # Assert that requests.get was called once with test_url
         mock_requests.assert_called_once_with(test_url)
+
+
+class TestMemoize(unittest.TestCase):
+    """Test class"""
+
+    def test_memoize(self):
+        """This method tests the utils.memoize function"""
+        class TestClass:
+
+            def a_method(self):
+                return 42
+
+            @memoize
+            def a_property(self):
+                return self.a_method()
+
+        with patch.object(TestClass, 'a_method',
+                          return_value=42) as mock_method:
+            test_instance = TestClass()
+
+            # Checking that the output of a_property is as expected
+            result = test_instance.a_property
+            self.assertEqual(result, 42)
+
+            result = test_instance.a_property
+            self.assertEqual(result, 42)
+
+            # Verify that a_method was called once due to memoization (caching)
+            mock_method.assert_called_once()
