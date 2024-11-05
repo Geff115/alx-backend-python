@@ -5,7 +5,7 @@ client.GithubOrgClient class.
 
 import unittest
 from client import GithubOrgClient
-from unittest.mock import patch
+from unittest.mock import patch, PropertyMock
 from utils import get_json
 from parameterized import parameterized
 from typing import Any, Dict
@@ -35,3 +35,20 @@ class TestGithubOrgClient(unittest.TestCase):
         mocked_request.assert_called_once_with(
             f"https://api.github.com/orgs/{org}"
         )
+
+    def test_public_repos_url(self):
+        """Test _public_repos_url returns the expected repos_url"""
+        with patch.object(GithubOrgClient, 'org',
+             new_callable=PropertyMock) as mock_org:
+            # Define the mock payload
+            mock_org.return_value = {
+                "repos_url": "https://api.github.com/orgs/test_org/repos"
+            }
+            # Instantiate the client and call the _public_repos_url property
+            client = GithubOrgClient("test_org")
+            result = client._public_repos_url
+
+            # Assert that _public_repos_url matches repos_url in mock payload
+            self.assertEqual(
+                result, "https://api.github.com/orgs/test_org/repos"
+            )
