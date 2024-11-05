@@ -54,7 +54,7 @@ class TestGithubOrgClient(unittest.TestCase):
             )
 
     @patch('client.get_json')
-    def test_public_repos(self, mock_get_json):
+    def test_public_repos(self, mock_get_json: Any) -> None:
         """Unit-test for public_repos"""
         # Mock response payload from get_json
         mock_repos_payload = [
@@ -84,3 +84,18 @@ class TestGithubOrgClient(unittest.TestCase):
             mock_get_json.assert_called_once_with(
                 "https://api.github.com/orgs/test_org/repos"
             )
+
+    @parameterized.expand([
+        ({"license": {"key": "my_license"}}, "my_license", True),
+        ({"license": {"key": "other_license"}}, "my_license", False),
+        ({}, "my_license", False)
+    ])
+    def test_has_license(self, repo: Dict,
+                         license_key: str, expected: bool) -> None:
+        """Unit-test for has_license"""
+        # Call the static method has_license
+        # with the given repo and license_key
+        result = GithubOrgClient.has_license(repo, license_key)
+
+        # Assert that the result matches the expected value
+        self.assertEqual(result, expected)
